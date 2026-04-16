@@ -14,6 +14,10 @@ namespace RunGroupWebApp.Models
         [ForeignKey("Address")]
         public int? AddressId { get; set; }
         public Address? Address { get; set; }
+        /// <summary>
+        /// Gets or sets the category of the club.
+        /// Stored as an integer in the database representing the <see cref="ClubCategory"/> enum int value.
+        /// </summary>
         public ClubCategory ClubCategory { get; set; }
         [ForeignKey("AppUser")]
         public string? AppUserId { get; set; }
