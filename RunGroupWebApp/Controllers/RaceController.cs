@@ -25,5 +25,26 @@ namespace RunGroupWebApp.Controllers
             Race race = await _raceRepo.GetByIdAsync(Id);
             return View(race);
         }
+
+        /// <summary>
+        /// Returns the view for creating a new entity.
+        /// </summary>
+        /// <returns>A view that displays the form for creating a new entity.</returns>
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(Race race)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(race);
+            }
+
+            await _raceRepo.AddAsync(race);
+            return RedirectToAction("Index");
+        }
     }
 }
