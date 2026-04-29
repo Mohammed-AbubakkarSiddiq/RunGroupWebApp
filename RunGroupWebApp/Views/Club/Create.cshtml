@@ -14,6 +14,11 @@
         <!--asp-validation-for helper to display validation message for invalid values -->
         <span asp-validation-for="Title" class="text-danger" ></span>
     </div>
+        <!-- asp-for binds a form field to a model property. What it does depends on where it's used.
+           1. Sets Id to link the related html elements
+           2. Sets the respective model property when data is posted
+           3. Gets the data from model (if already has value) and repopulate the view
+        -->
         <div class="form-group">
         <label asp-for="Description">Description</label>
         <input asp-for="Description" placeholder="Description" class="form-control">
