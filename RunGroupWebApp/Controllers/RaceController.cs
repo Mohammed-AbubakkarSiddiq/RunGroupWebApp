@@ -4,15 +4,18 @@ using RunGroupWebApp.Data;
 using RunGroupWebApp.Interfaces;
 using RunGroupWebApp.Models;
 using RunGroupWebApp.Repositories;
+using RunGroupWebApp.ViewModels;
 
 namespace RunGroupWebApp.Controllers
 {
     public class RaceController : Controller
     {
         private readonly IRaceRepository _raceRepo;
-        public RaceController(IRaceRepository raceRepository)
+        private readonly IPhotoService _photoService;
+        public RaceController(IRaceRepository raceRepository, IPhotoService photoService)
         {
             _raceRepo = raceRepository;
+            _photoService = photoService;
         }
         public async Task<IActionResult> Index()
         {
@@ -36,15 +39,35 @@ namespace RunGroupWebApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Race race)
+        public async Task<IActionResult> Create(CreateRaceViewModel createRaceVM)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                return View(race);
+                var result = await _photoService.UploadImageAsync(createRaceVM.Image);
+
+                var race = new Race
+                {
+                    Title = createRaceVM.Title,
+                    Description = createRaceVM.Description,
+                    Image = result.Url.ToString(),
+                    RaceCategory = createRaceVM.RaceCategory,
+                    Address = new Address
+                    {
+                        Street = createRaceVM.Address.Street,
+                        City = createRaceVM.Address.City,
+                        State = createRaceVM.Address.State
+                    }
+                };
+
+                await _raceRepo.AddAsync(race);
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                ModelState.AddModelError("", "Error in adding image");
             }
 
-            await _raceRepo.AddAsync(race);
-            return RedirectToAction("Index");
+            return View(createRaceVM);
         }
     }
 }
