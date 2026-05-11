@@ -41,17 +41,21 @@ namespace RunGroupWebApp.Repositories
             return await _context.Races.Include(c => c.Address).FirstOrDefaultAsync(c => c.Id == id);
         }
 
+        public async Task<Race> GetByIdAsyncNoTracking(int id)
+        {
+            return await _context.Races.Include(c => c.Address).AsNoTracking().FirstOrDefaultAsync(c => c.Id == id);
+        }
+
         public async Task<bool> SaveAsync()
         {
             var isSaved = await _context.SaveChangesAsync();
             return isSaved > 0 ? true : false;
         }
 
-        public bool UpdateAsync(Race race)
+        public async Task<bool> UpdateAsync(Race race)
         {
-            _context.Update(race);
-            var updated = _context.SaveChanges();
-            return updated > 0 ? true : false;
+            await Task.Run(() => _context.Update(race));
+            return await SaveAsync();
         }
     }
 }

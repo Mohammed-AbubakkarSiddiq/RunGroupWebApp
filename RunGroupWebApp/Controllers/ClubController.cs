@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CloudinaryDotNet.Actions;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RunGroupWebApp.Data;
 using RunGroupWebApp.Interfaces;
@@ -78,6 +79,81 @@ namespace RunGroupWebApp.Controllers
             }
 
             return View(createClubVM);
+        }
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            var club = await _clubRepository.GetByIdAsync(id);
+
+            if (club == null) return View("Error");
+
+            var clubVM = new EditClubViewModel
+            {
+                Title = club.Title,
+                Description = club.Description,
+                AddressId = club.AddressId,
+                Address = club.Address,
+                ClubCategory = club.ClubCategory
+            };
+
+            //For edit, we need to populate the view with the entity selected for edit. So, user can easily edit it.
+            return View(clubVM);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(EditClubViewModel editedClubVM, int id)
+        {
+            //Model validation
+            if(!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Error in editing the club");
+                return View("Edit",editedClubVM);
+            }
+
+            //Checking if the id is valid and club exist
+            var existingClub = await _clubRepository.GetByIdAsyncNoTracking(id);
+            var photoUploadResult = new ImageUploadResult();
+
+            if (existingClub != null)
+            {
+                try
+                {
+                    //Deleting the previously uploaded photo with the URL (public Id got from the database respective record)
+                    await _photoService.DeleteImageAsync(existingClub.Image);
+                    //Uploading the new image (IFormFile)
+                    photoUploadResult = await _photoService.UploadImageAsync(editedClubVM.Image);
+                }
+                catch (Exception ex) 
+                {
+                    ModelState.AddModelError("", "Error in editing the photo");
+                    return View();
+                }
+
+                var editedClub = new Club
+                {
+                    Id = id,
+                    Title = editedClubVM.Title,
+                    Description = editedClubVM.Description,
+                    Image = photoUploadResult.Url.ToString(),
+                    AddressId = editedClubVM.AddressId,
+                    Address = new Address
+                    {
+                        Id = (int)editedClubVM.AddressId,
+                        Street = editedClubVM.Address.Street,
+                        City = editedClubVM.Address.City,
+                        State = editedClubVM.Address.State
+                    },
+                    ClubCategory = editedClubVM.ClubCategory
+                };
+
+                await _clubRepository.UpdateAsync(editedClub);
+
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return View(editedClubVM);
+            }
         }
     }
 }

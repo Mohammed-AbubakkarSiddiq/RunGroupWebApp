@@ -1,0 +1,60 @@
+﻿@using RunGroupWebApp.Data.Enums
+@using RunGroupWebApp.ViewModels
+@model EditRaceViewModel
+
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<form method="post" asp-action="Edit" enctype="multipart/form-data">
+    <input type="hidden" asp-for="AddressId" />
+    <div class="form-group">
+        <label asp-for="Title">Title</label>
+        <input asp-for="Title" placeholder="Title" class="form-control">
+        <!--asp-validation-for helper to display validation message for invalid values -->
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+    <!-- asp-for binds a form field to a model property. What it does depends on where it's used.
+           1. Sets Id to link the related html elements
+           2. Sets the respective model property when data is posted
+           3. Gets the data from model (if already has value) and repopulate the view
+        -->
+    <div class="form-group">
+        <label asp-for="Description">Description</label>
+        <input asp-for="Description" placeholder="Description" class="form-control">
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="RaceCategory">RaceCategory</label>
+        <!--asp-items helper to get the list of items from backend to view -->
+        <!-- GetEnumSelectList - return the select list for the given enum -->
+        <select asp-for="RaceCategory" asp-items="@Html.GetEnumSelectList<RaceCategory>()">
+            <option>--Select--</option>
+        </select>
+        <span asp-validation-for="RaceCategory" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Address.Street">Street</label>
+        <input asp-for="Address.Street" placeholder="Street" class="form-control">
+        <span asp-validation-for="Address.Street" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Address.City">City</label>
+        <input asp-for="Address.City" placeholder="City" class="form-control">
+        <span asp-validation-for="Address.City" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Address.State">State</label>
+        <input asp-for="Address.State" placeholder="State" class="form-control">
+        <span asp-validation-for="Address.State" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Image">Image</label>
+        <input asp-for="Image" type="file" placeholder="Image" class="form-control">
+        <span asp-validation-for="Image" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>

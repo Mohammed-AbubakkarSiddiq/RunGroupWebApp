@@ -6,9 +6,10 @@ namespace RunGroupWebApp.Interfaces
     {
         Task<IEnumerable<Club>> GetAllAsync();
         Task<Club> GetByIdAsync(int id);
+        Task<Club> GetByIdAsyncNoTracking(int id);
         Task<IEnumerable<Club>> GetByCityAsync(string city);
         Task<bool> AddAsync(Club club);
-        bool UpdateAsync(Club club);
+        Task<bool> UpdateAsync(Club club);
         bool DeleteAsync(Club club);
         Task<bool> SaveAsync();
     }
