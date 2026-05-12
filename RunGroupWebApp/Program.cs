@@ -1,7 +1,10 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using RunGroupWebApp.Data;
 using RunGroupWebApp.Helpers;
 using RunGroupWebApp.Interfaces;
+using RunGroupWebApp.Models;
 using RunGroupWebApp.Repositories;
 using RunGroupWebApp.Services;
 
@@ -15,6 +18,17 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+//Register Identity in DI
+builder.Services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
+
+//This is added else there will be issues \ errors.
+builder.Services.AddMemoryCache();
+
+//Cookie authentication configuration 
+builder.Services.AddSession();
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
+
 builder.Services.AddScoped<IClubRepository, ClubRepository>();
 builder.Services.AddScoped<IRaceRepository, RaceRepository>();
 //Photo upload feature final step: Add the service in DI container. Then you can use wherever needed.
@@ -25,7 +39,7 @@ var app = builder.Build();
 if (args.Length == 1 && args[0].ToLower() == "seeddata")
 {
     //await Seed.SeedUsersAndRolesAsync(app);
-    Seed.SeedData(app);
+    //Seed.SeedData(app);
 }
 
 // Configure the HTTP request pipeline.

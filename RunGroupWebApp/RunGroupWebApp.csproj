@@ -9,12 +9,14 @@
   <ItemGroup>
 	  <!--Photo upload feature step 2: Install CloudinaryDotNet nuget package-->
     <PackageReference Include="CloudinaryDotNet" Version="1.29.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.26" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.26" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.26" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.26">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="8.0.26" />
   </ItemGroup>
 
 </Project>
