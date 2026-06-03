@@ -31,6 +31,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
 builder.Services.AddScoped<IClubRepository, ClubRepository>();
 builder.Services.AddScoped<IRaceRepository, RaceRepository>();
+builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
 //Photo upload feature final step: Add the service in DI container. Then you can use wherever needed.
 builder.Services.AddScoped<IPhotoService, PhotoService>();
 var app = builder.Build();
