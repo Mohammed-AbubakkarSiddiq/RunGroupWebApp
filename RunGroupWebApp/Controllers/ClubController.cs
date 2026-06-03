@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RunGroupWebApp.Data;
+using RunGroupWebApp.Extensions;
 using RunGroupWebApp.Interfaces;
 using RunGroupWebApp.Models;
 using RunGroupWebApp.ViewModels;
@@ -37,7 +38,13 @@ namespace RunGroupWebApp.Controllers
         /// <returns>A view that displays the form for creating a new entity.</returns>
         public IActionResult Create()
         {
-            return View();
+            var currentUserId = User.GetUserId();
+            var createClubVM = new CreateClubViewModel
+            {
+                //This id will be included as a hidded input in the view.
+                AppUserId = currentUserId
+            };
+            return View(createClubVM);
         }
 
         /// <summary>
@@ -63,6 +70,8 @@ namespace RunGroupWebApp.Controllers
                     //Once uploaded add the URL of the uploaded image is about to be added in the database.
                     Image = result.Url.ToString(),
                     ClubCategory = createClubVM.ClubCategory,
+                    //Value taken from the hidden input in the view
+                    AppUserId = createClubVM.AppUserId,
                     Address = new Address
                     {
                         Street = createClubVM.Address.Street,

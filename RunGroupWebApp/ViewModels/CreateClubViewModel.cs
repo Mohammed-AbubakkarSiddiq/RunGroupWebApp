@@ -17,5 +17,6 @@ namespace RunGroupWebApp.ViewModels
         /// Stored as an integer in the database representing the <see cref="ClubCategory"/> enum int value.
         /// </summary>
         public ClubCategory ClubCategory { get; set; }
+        public string? AppUserId { get; set; }
     }
 }

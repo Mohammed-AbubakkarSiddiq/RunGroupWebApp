@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RunGroupWebApp.Data;
+using RunGroupWebApp.Extensions;
 using RunGroupWebApp.Interfaces;
 using RunGroupWebApp.Models;
 using RunGroupWebApp.Repositories;
@@ -36,7 +37,13 @@ namespace RunGroupWebApp.Controllers
         /// <returns>A view that displays the form for creating a new entity.</returns>
         public IActionResult Create()
         {
-            return View();
+            var currentUserId = User.GetUserId();
+            var createRaceVM = new CreateRaceViewModel
+            {
+                //This id will be included as a hidded input in the view.
+                AppUserId = currentUserId
+            };
+            return View(createRaceVM);
         }
 
         [HttpPost]
@@ -52,6 +59,8 @@ namespace RunGroupWebApp.Controllers
                     Description = createRaceVM.Description,
                     Image = result.Url.ToString(),
                     RaceCategory = createRaceVM.RaceCategory,
+                    //Value taken from the hidden input in the view
+                    AppUserId = createRaceVM.AppUserId,
                     Address = new Address
                     {
                         Street = createRaceVM.Address.Street,
