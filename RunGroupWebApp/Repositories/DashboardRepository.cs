@@ -32,5 +32,27 @@ namespace RunGroupWebApp.Repositories
 
             return userRaces;
         }
+
+        public async Task<AppUser> GetUserByIdAsync(string id)
+        {
+            return await _context.Users.Include(u => u.Address).FirstOrDefaultAsync(u => u.Id == id);
+        }
+
+        public async Task<AppUser> GetUserByIdAsyncAsNoTracking(string id)
+        {
+            return await _context.Users.Include(u => u.Address).AsNoTracking().FirstOrDefaultAsync(u => u.Id == id);
+        }
+
+        public async Task<bool> SaveAsync()
+        {
+            var isSaved = await _context.SaveChangesAsync();
+            return isSaved > 0 ? true : false;
+        }
+
+        public async Task<bool> UpdateUserAsync(AppUser user)
+        {
+            _context.Update(user);
+            return await SaveAsync();
+        }
     }
 }

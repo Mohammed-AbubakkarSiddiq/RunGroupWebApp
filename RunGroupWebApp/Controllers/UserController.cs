@@ -26,7 +26,8 @@ namespace RunGroupWebApp.Controllers
                     Id = appUser.Id,
                     UserName = appUser.UserName,
                     Pace = appUser.Pace,
-                    Mileage = appUser.Mileage
+                    Mileage = appUser.Mileage,
+                    Image = appUser.ImageURL
                 };
 
                 userVMList.Add(userVM);
@@ -43,7 +44,8 @@ namespace RunGroupWebApp.Controllers
                 Id = user.Id,
                 UserName = user.UserName, 
                 Pace = user.Pace,
-                Mileage =user.Mileage
+                Mileage =user.Mileage,
+                Image = user.ImageURL
             };
 
             return View(userVM);

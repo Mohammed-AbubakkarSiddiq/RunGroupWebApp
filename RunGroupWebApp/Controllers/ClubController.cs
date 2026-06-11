@@ -120,6 +120,8 @@ namespace RunGroupWebApp.Controllers
             }
 
             //Checking if the id is valid and club exist
+            //We need as no tracking entity when we are creating a new instance of that entity with same Id.
+            //Else, it will throw an exception.
             var existingClub = await _clubRepository.GetByIdAsyncNoTracking(id);
             var photoUploadResult = new ImageUploadResult();
 
