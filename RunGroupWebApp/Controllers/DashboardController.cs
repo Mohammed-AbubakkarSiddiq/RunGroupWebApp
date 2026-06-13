@@ -80,9 +80,7 @@ namespace RunGroupWebApp.Controllers
                 return View(editUserVM);
             }
 
-            var currentUserId = User.GetUserId();
-
-            var appUser = await _dashboardRepo.GetUserByIdAsync(currentUserId);
+            var appUser = await _dashboardRepo.GetUserByIdAsync(editUserVM.UserId);
 
             if (appUser == null)
             {
