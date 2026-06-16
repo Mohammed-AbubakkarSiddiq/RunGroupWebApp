@@ -154,5 +154,27 @@ namespace RunGroupWebApp.Controllers
                 return View(editedRaceVM);
             }
         }
+
+        public async Task<IActionResult> Delete(int Id)
+        {
+            var club = await _raceRepo.GetByIdAsync(Id);
+
+            if (club == null) return View("Error");
+
+            return View(club);
+        }
+
+        [HttpPost]
+        [ActionName("Delete")]
+        public async Task<IActionResult> DeleteClub(int Id)
+        {
+            var club = await _raceRepo.GetByIdAsync(Id);
+
+            if (club == null) return View("Error");
+
+            _raceRepo.DeleteAsync(club);
+
+            return RedirectToAction("Index");
+        }
     }
 }
