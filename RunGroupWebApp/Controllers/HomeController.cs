@@ -36,13 +36,22 @@ namespace RunGroupWebApp.Controllers
 
                 //Deserialize JSON into the object
                 ipInfo = JsonConvert.DeserializeObject<IPInfo>(userLocationInfo);
+
+                // Create a RegionInfo object using the 2-letter country code (e.g. "IN")
                 RegionInfo regionInfo = new RegionInfo(ipInfo.Country);
+
+                // Get the full English name of that country (e.g. "India") and store it back
                 ipInfo.Country = regionInfo.EnglishName;
                 homeVM.City = ipInfo.City;
                 homeVM.State = ipInfo.Region;
                 if (homeVM.City != null)
                 {
                     homeVM.Clubs = await _clubRepo.GetByCityAsync(homeVM.City);
+
+                    if (homeVM.Clubs.Count() == 0)
+                    {
+                        homeVM.Clubs = null;
+                    }
                 }
                 else
                 {
